@@ -8,10 +8,25 @@
 import Foundation
 
 enum MessageContent: Codable {
-    case HelloMessage
+    case hello(HelloMessage)
 }
 
-struct Message: Codable {
-    var op: OpCode
-    var d: MessageContent
+struct Message: Decodable {
+    let message: MessageContent
+    
+    enum CodingKeys: String, CodingKey {
+        case op
+        case d
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let op = try container.decode(OpCode.self, forKey: .op)
+        
+        switch op {
+            case .Hello:
+                let content = try container.decode(HelloMessage.self, forKey: .d)
+                message = .hello(content)
+        }
+    }
 }

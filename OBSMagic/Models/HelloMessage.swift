@@ -8,8 +8,8 @@
 import Foundation
 
 struct HelloMessage: Codable {
-    var obsStudioVersion: String?
-    var obsWebSocketVersion: String?
-    var rpcVersion: String?
+    var obsStudioVersion: String
+    var obsWebSocketVersion: String
+    var rpcVersion: Int
     var authentication: AuthenticationChallenge?
 }
