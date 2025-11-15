@@ -11,8 +11,8 @@ enum MessageContent: Codable {
     case hello(HelloMessage)
 }
 
-struct Message: Decodable {
-    let message: MessageContent
+struct Message: Codable {
+    var message: MessageContent
     
     enum CodingKeys: String, CodingKey {
         case op
@@ -29,4 +29,15 @@ struct Message: Decodable {
                 message = .hello(content)
         }
     }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        switch message {
+            case .hello(let content):
+                try container.encode(OpCode.Hello, forKey: .op)
+                try container.encode(content, forKey: .d)
+        }
+    }
+
 }
